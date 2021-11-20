@@ -1,7 +1,7 @@
 use std::error;
 
 use http_api_client::{Client, ClientRespondEndpointError};
-use http_api_client_endpoint::{Body, Request};
+use http_api_client_endpoint::{Body, Request, Response};
 
 use crate::JsonWebKeySet;
 
@@ -25,20 +25,22 @@ impl<C> Fetcher<C>
 where
     C: Client + Send + Sync,
 {
-    pub async fn fetch<PreRCB>(
+    pub async fn fetch<PreRCB, PostRCB>(
         &self,
         url: impl AsRef<str>,
         pre_request_callback: PreRCB,
+        post_request_callback: PostRCB,
     ) -> Result<FetcherFetchOutput, FetcherFetchError>
     where
         PreRCB: FnMut(Request<Body>) -> Request<Body> + Send,
+        PostRCB: FnMut(&Response<Body>) + Send,
     {
         let url = url.as_ref();
         let endpoint = KeysEndpoint::new(url);
 
         let jwk_set = self
             .client
-            .respond_endpoint_with_callback(&endpoint, pre_request_callback, |_| {})
+            .respond_endpoint_with_callback(&endpoint, pre_request_callback, post_request_callback)
             .await
             .map_err(|err| match err {
                 ClientRespondEndpointError::RespondFailed(err) => {
