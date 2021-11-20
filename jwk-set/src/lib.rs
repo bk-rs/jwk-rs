@@ -13,7 +13,7 @@ pub mod fetcher;
 //
 //
 //
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default)]
 pub struct JsonWebKeySet {
     pub keys: Vec<JsonWebKey>,
 }
