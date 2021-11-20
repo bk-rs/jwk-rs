@@ -2,9 +2,9 @@ use http_api_client_endpoint::{
     http::{header::ACCEPT, Error as HttpError},
     Body, Endpoint, Request, Response, MIME_APPLICATION_JSON,
 };
-use jsonwebkey::JsonWebKey;
-use serde::{Deserialize, Serialize};
 use serde_json::Error as SerdeJsonError;
+
+use crate::JsonWebKeySet;
 
 //
 #[derive(Debug, Clone, Default)]
@@ -20,7 +20,7 @@ impl<'a> KeysEndpoint<'a> {
 impl<'a> Endpoint for KeysEndpoint<'a> {
     type RenderRequestError = KeysEndpointError;
 
-    type ParseResponseOutput = KeysEndpointResponseBody;
+    type ParseResponseOutput = JsonWebKeySet;
     type ParseResponseError = KeysEndpointError;
 
     fn render_request(&self) -> Result<Request<Body>, Self::RenderRequestError> {
@@ -37,16 +37,11 @@ impl<'a> Endpoint for KeysEndpoint<'a> {
         &self,
         response: Response<Body>,
     ) -> Result<Self::ParseResponseOutput, Self::ParseResponseError> {
-        let body = serde_json::from_slice::<KeysEndpointResponseBody>(response.body())
+        let body = serde_json::from_slice::<JsonWebKeySet>(response.body())
             .map_err(KeysEndpointError::DeResponseBodyFailed)?;
 
         Ok(body)
     }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct KeysEndpointResponseBody {
-    pub keys: Vec<JsonWebKey>,
 }
 
 #[derive(thiserror::Error, Debug)]

@@ -48,7 +48,7 @@ impl DecryptExt for JsonWebKeySet {
 
         let jwt_header = jwt::decode_header(token).map_err(DecryptError::DecodeHeaderFailed)?;
 
-        let kid = jwt_header.kid.ok_or_else(|| DecryptError::KidMissing)?;
+        let kid = jwt_header.kid.ok_or(DecryptError::KidMissing)?;
         let jwt_alg = jwt_header.alg;
 
         let jwk = self
@@ -57,11 +57,12 @@ impl DecryptExt for JsonWebKeySet {
             .find(|jwk| {
                 jwk.key_id == Some(kid.to_owned()) && jwk.algorithm.map(Into::into) == Some(jwt_alg)
             })
-            .or(self
-                .keys()
-                .iter()
-                .find(|jwk| jwk.key_id == Some(kid.to_owned())))
-            .ok_or_else(|| DecryptError::KidNotFound)?;
+            .or_else(|| {
+                self.keys()
+                    .iter()
+                    .find(|jwk| jwk.key_id == Some(kid.to_owned()))
+            })
+            .ok_or(DecryptError::KidNotFound)?;
 
         let jwt_key = jwk.key.to_decoding_key();
 

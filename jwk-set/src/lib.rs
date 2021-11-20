@@ -1,6 +1,7 @@
 //! https://datatracker.ietf.org/doc/html/rfc7517#section-5
 
 use jsonwebkey::JsonWebKey;
+use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "with-decrypt")]
 pub mod decrypt;
@@ -10,16 +11,16 @@ pub mod fetcher;
 //
 //
 //
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct JsonWebKeySet {
-    inner: Vec<JsonWebKey>,
+    pub keys: Vec<JsonWebKey>,
 }
 impl JsonWebKeySet {
     pub fn new(keys: Vec<JsonWebKey>) -> Self {
-        Self { inner: keys }
+        Self { keys }
     }
 
     pub fn keys(&self) -> &[JsonWebKey] {
-        &self.inner
+        &self.keys
     }
 }

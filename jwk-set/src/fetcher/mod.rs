@@ -7,7 +7,7 @@ use crate::JsonWebKeySet;
 
 pub mod keys_endpoint;
 
-pub use keys_endpoint::{KeysEndpoint, KeysEndpointError, KeysEndpointResponseBody};
+pub use keys_endpoint::{KeysEndpoint, KeysEndpointError};
 
 //
 //
@@ -36,7 +36,7 @@ where
         let url = url.as_ref();
         let endpoint = KeysEndpoint::new(url);
 
-        let body = self
+        let set = self
             .client
             .respond_endpoint_with_callback(&endpoint, pre_request_callback, |_| {})
             .await
@@ -52,7 +52,7 @@ where
                 }
             })?;
 
-        Ok(FetcherFetchOutput { set: body.into() })
+        Ok(FetcherFetchOutput { set })
     }
 }
 
@@ -67,13 +67,4 @@ pub enum FetcherFetchError {
     KeysEndpointError(KeysEndpointError),
     #[error("KeysEndpointRespondFailed {0}")]
     KeysEndpointRespondFailed(Box<dyn error::Error + Send + Sync>),
-}
-
-//
-//
-//
-impl From<KeysEndpointResponseBody> for JsonWebKeySet {
-    fn from(body: KeysEndpointResponseBody) -> Self {
-        Self::new(body.keys)
-    }
 }
