@@ -7,14 +7,14 @@ use serde::de::DeserializeOwned;
 use crate::JsonWebKeySet;
 
 pub trait DecryptExt {
-    fn decrypt<C>(
+    fn decrypt<JC>(
         &self,
         token: impl AsRef<str>,
         skip_validate_exp: impl Into<Option<bool>>,
         algorithms_supported: impl Into<Option<Vec<Algorithm>>>,
-    ) -> Result<(JwtHeader, C), DecryptError>
+    ) -> Result<(JwtHeader, JC), DecryptError>
     where
-        C: DeserializeOwned;
+        JC: DeserializeOwned;
 }
 
 #[derive(Debug)]
@@ -35,14 +35,14 @@ impl error::Error for DecryptError {}
 //
 //
 impl DecryptExt for JsonWebKeySet {
-    fn decrypt<C>(
+    fn decrypt<JC>(
         &self,
         token: impl AsRef<str>,
         skip_validate_exp: impl Into<Option<bool>>,
         algorithms_supported: impl Into<Option<Vec<Algorithm>>>,
-    ) -> Result<(JwtHeader, C), DecryptError>
+    ) -> Result<(JwtHeader, JC), DecryptError>
     where
-        C: DeserializeOwned,
+        JC: DeserializeOwned,
     {
         let token = token.as_ref();
 
@@ -80,8 +80,8 @@ impl DecryptExt for JsonWebKeySet {
             jwt_validation.algorithms = algorithms_supported.into_iter().map(Into::into).collect()
         }
 
-        let jwt::TokenData { header, claims } = jwt::decode::<C>(token, &jwt_key, &jwt_validation)
-            .map_err(DecryptError::DecodeFailed)?;
+        let jwt::TokenData { header, claims } =
+            jwt::decode(token, &jwt_key, &jwt_validation).map_err(DecryptError::DecodeFailed)?;
 
         Ok((header, claims))
     }
