@@ -1,5 +1,7 @@
 //! https://datatracker.ietf.org/doc/html/rfc7517#section-5
 
+pub use jsonwebkey;
+
 use jsonwebkey::JsonWebKey;
 use serde::{Deserialize, Serialize};
 

@@ -1,3 +1,5 @@
+pub use jsonwebtoken;
+
 use std::{error, fmt};
 
 use jsonwebkey::Algorithm;
