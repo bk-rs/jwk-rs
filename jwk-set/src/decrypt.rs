@@ -92,24 +92,14 @@ impl DecryptExt for JsonWebKeySet {
 mod tests {
     use super::*;
 
-    use jsonwebkey::JsonWebKey;
-    use serde::Deserialize;
     use serde_json::{Map, Value};
-
-    #[derive(Deserialize, Debug, Clone)]
-    struct OidcKeysJson {
-        keys: Vec<JsonWebKey>,
-    }
 
     #[test]
     fn test_decrypt_with_apple() {
-        let set = JsonWebKeySet::new(
-            serde_json::from_str::<OidcKeysJson>(include_str!(
-                "../tests/oidc_keys_json_files/apple.json"
-            ))
-            .unwrap()
-            .keys,
-        );
+        let set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+            "../tests/oidc_keys_json_files/apple.json"
+        ))
+        .unwrap();
 
         let id_token = include_str!("../tests/oidc_id_token_files/apple.txt");
 
@@ -126,13 +116,10 @@ mod tests {
 
     #[test]
     fn test_decrypt_with_microsoft() {
-        let set = JsonWebKeySet::new(
-            serde_json::from_str::<OidcKeysJson>(include_str!(
-                "../tests/oidc_keys_json_files/microsoft.json"
-            ))
-            .unwrap()
-            .keys,
-        );
+        let set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+            "../tests/oidc_keys_json_files/microsoft.json"
+        ))
+        .unwrap();
 
         let id_token = include_str!("../tests/oidc_id_token_files/microsoft.txt");
 
