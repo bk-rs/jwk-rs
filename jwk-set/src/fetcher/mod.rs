@@ -36,7 +36,7 @@ where
         let url = url.as_ref();
         let endpoint = KeysEndpoint::new(url);
 
-        let set = self
+        let jwk_set = self
             .client
             .respond_endpoint_with_callback(&endpoint, pre_request_callback, |_| {})
             .await
@@ -52,13 +52,15 @@ where
                 }
             })?;
 
-        Ok(FetcherFetchOutput { set })
+        // TODO, Cache-Control and Etag
+
+        Ok(FetcherFetchOutput { jwk_set })
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct FetcherFetchOutput {
-    pub set: JsonWebKeySet,
+    pub jwk_set: JsonWebKeySet,
 }
 
 #[derive(thiserror::Error, Debug)]

@@ -96,14 +96,15 @@ mod tests {
 
     #[test]
     fn test_decrypt_with_apple() {
-        let set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+        let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
             "../tests/oidc_keys_json_files/apple.json"
         ))
         .unwrap();
 
         let id_token = include_str!("../tests/oidc_id_token_files/apple.txt");
 
-        let (header, claims): (_, Map<String, Value>) = set.decrypt(id_token, true, None).unwrap();
+        let (header, claims): (_, Map<String, Value>) =
+            jwk_set.decrypt(id_token, true, None).unwrap();
 
         assert_eq!(header.kid, Some("eXaunmL".to_owned()));
         assert_eq!(header.alg, jwt::Algorithm::RS256);
@@ -116,15 +117,16 @@ mod tests {
 
     #[test]
     fn test_decrypt_with_microsoft() {
-        let set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+        let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
             "../tests/oidc_keys_json_files/microsoft.json"
         ))
         .unwrap();
 
         let id_token = include_str!("../tests/oidc_id_token_files/microsoft.txt");
 
-        let (header, claims): (_, Map<String, Value>) =
-            set.decrypt(id_token, true, vec![Algorithm::RS256]).unwrap();
+        let (header, claims): (_, Map<String, Value>) = jwk_set
+            .decrypt(id_token, true, vec![Algorithm::RS256])
+            .unwrap();
 
         assert_eq!(header.kid, Some("bW8ZcMjBCnJZS-ibX5UQDNStvx4".to_owned()));
         assert_eq!(header.alg, jwt::Algorithm::RS256);
