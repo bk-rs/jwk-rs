@@ -12,4 +12,24 @@ keywords = []
 categories = []
 readme = "README.md"
 
+[package.metadata.docs.rs]
+all-features = true
+
+[features]
+default = ["with-decrypt", "with-fetcher"]
+
+with-decrypt = ["jsonwebkey/jwt-convert", "jsonwebtoken", "serde"]
+with-fetcher = ["http-api-client-endpoint", "http-api-client", "serde", "serde_json"]
+
 [dependencies]
+jsonwebkey = { version = "0.3", default-features = false }
+
+jsonwebtoken = { version = "7.2", default-features = false, optional = true }
+
+http-api-client-endpoint = { version = "0.2", default-features = false, optional = true }
+http-api-client = { version = "0.2", default-features = false, optional = true }
+serde = { version = "1.0", default-features = false, features = ["std", "derive"], optional = true }
+serde_json = { version = "1.0", default-features = false, features = ["std"], optional = true }
+
+[dev-dependencies]
+serde_json = { version = "1.0", default-features = false, features = ["std"] }
