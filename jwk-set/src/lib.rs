@@ -26,3 +26,11 @@ impl JsonWebKeySet {
         &self.keys
     }
 }
+
+#[cfg(feature = "serde_json")]
+impl std::str::FromStr for JsonWebKeySet {
+    type Err = serde_json::Error;
+    fn from_str(json: &str) -> Result<Self, Self::Err> {
+        serde_json::from_str(json)
+    }
+}

@@ -16,10 +16,12 @@ readme = "README.md"
 all-features = true
 
 [features]
-default = ["with-decrypt", "with-fetcher"]
+default = ["with-decrypt"]
 
 with-decrypt = ["jsonwebkey/jwt-convert", "jsonwebtoken"]
 with-fetcher = ["http-api-client-endpoint", "http-api-client", "serde_json", "thiserror"]
+
+_priv_with_serde_json = ["serde_json"]
 
 [dependencies]
 jsonwebkey = { version = "0.3", default-features = false }
@@ -37,3 +39,7 @@ serde_json = { version = "1.0", default-features = false, features = ["std"] }
 
 [package.metadata.cargo-all-features]
 skip_optional_dependencies = true
+skip_feature_sets = [
+    ["_priv_with_serde_json", "with-decrypt"],
+    ["_priv_with_serde_json", "with-fetcher"],
+]
