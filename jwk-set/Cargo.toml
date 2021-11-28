@@ -19,7 +19,6 @@ all-features = true
 default = ["with-decrypt"]
 
 with-decrypt = ["jsonwebkey/jwt-convert", "jsonwebtoken"]
-with-fetcher = ["http-api-client-endpoint", "http-api-client", "serde_json", "thiserror"]
 
 _priv_with_serde_json = ["serde_json"]
 
@@ -29,10 +28,7 @@ serde = { version = "1.0", default-features = false, features = ["std", "derive"
 
 jsonwebtoken = { version = "7.2", default-features = false, optional = true }
 
-http-api-client-endpoint = { version = "0.2", default-features = false, optional = true }
-http-api-client = { version = "0.2", default-features = false, optional = true }
 serde_json = { version = "1.0", default-features = false, features = ["std"], optional = true }
-thiserror = { version = "1.0", default-features = false, optional = true }
 
 [dev-dependencies]
 serde_json = { version = "1.0", default-features = false, features = ["std"] }

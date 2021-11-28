@@ -7,8 +7,6 @@ use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "with-decrypt")]
 pub mod decrypt;
-#[cfg(feature = "with-fetcher")]
-pub mod fetcher;
 
 //
 //
