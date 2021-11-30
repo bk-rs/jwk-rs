@@ -15,15 +15,6 @@ pub mod decrypt;
 pub struct JsonWebKeySet {
     pub keys: Vec<JsonWebKey>,
 }
-impl JsonWebKeySet {
-    pub fn new(keys: Vec<JsonWebKey>) -> Self {
-        Self { keys }
-    }
-
-    pub fn keys(&self) -> &[JsonWebKey] {
-        &self.keys
-    }
-}
 
 #[cfg(feature = "serde_json")]
 impl std::str::FromStr for JsonWebKeySet {

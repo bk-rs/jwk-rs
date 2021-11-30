@@ -37,5 +37,4 @@ serde_json = { version = "1.0", default-features = false, features = ["std"] }
 skip_optional_dependencies = true
 skip_feature_sets = [
     ["_priv_with_serde_json", "with-decrypt"],
-    ["_priv_with_serde_json", "with-fetcher"],
 ]

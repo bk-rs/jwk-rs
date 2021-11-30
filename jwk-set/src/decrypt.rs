@@ -54,13 +54,13 @@ impl DecryptExt for JsonWebKeySet {
         let jwt_alg = jwt_header.alg;
 
         let jwk = self
-            .keys()
+            .keys
             .iter()
             .find(|jwk| {
                 jwk.key_id == Some(kid.to_owned()) && jwk.algorithm.map(Into::into) == Some(jwt_alg)
             })
             .or_else(|| {
-                self.keys()
+                self.keys
                     .iter()
                     .find(|jwk| jwk.key_id == Some(kid.to_owned()))
             })
