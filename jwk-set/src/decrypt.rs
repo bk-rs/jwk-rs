@@ -97,11 +97,12 @@ mod tests {
     use serde_json::{Map, Value};
 
     #[test]
-    fn test_decrypt_with_apple() {
+    fn test_de_and_decrypt_with_apple_oidc() {
         let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
             "../tests/oidc_keys_json_files/apple.json"
         ))
         .unwrap();
+        assert_eq!(jwk_set.keys.len(), 3);
 
         let id_token = include_str!("../tests/oidc_id_token_files/apple.txt");
 
@@ -118,11 +119,30 @@ mod tests {
     }
 
     #[test]
-    fn test_decrypt_with_microsoft() {
+    fn test_de_with_gitlab_oidc() {
+        let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+            "../tests/oidc_keys_json_files/gitlab.json"
+        ))
+        .unwrap();
+        assert_eq!(jwk_set.keys.len(), 2);
+    }
+
+    #[test]
+    fn test_de_with_google_oidc() {
+        let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+            "../tests/oidc_keys_json_files/google.json"
+        ))
+        .unwrap();
+        assert_eq!(jwk_set.keys.len(), 3);
+    }
+
+    #[test]
+    fn test_de_and_decrypt_with_microsoft_oidc() {
         let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
             "../tests/oidc_keys_json_files/microsoft.json"
         ))
         .unwrap();
+        assert_eq!(jwk_set.keys.len(), 7);
 
         let id_token = include_str!("../tests/oidc_id_token_files/microsoft.txt");
 
@@ -137,5 +157,14 @@ mod tests {
             claims.get("iss").unwrap().as_str().unwrap(),
             "https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad/v2.0"
         );
+    }
+
+    #[test]
+    fn test_de_with_yahoo_oidc() {
+        let jwk_set = serde_json::from_str::<JsonWebKeySet>(include_str!(
+            "../tests/oidc_keys_json_files/yahoo.json"
+        ))
+        .unwrap();
+        assert_eq!(jwk_set.keys.len(), 3);
     }
 }
