@@ -23,10 +23,10 @@ with-decrypt = ["jsonwebkey/jwt-convert", "jsonwebtoken"]
 _priv_with_serde_json = ["serde_json"]
 
 [dependencies]
-jsonwebkey = { version = "0.3", default-features = false }
+jsonwebkey = { version = "0.3.5", default-features = false }
 serde = { version = "1.0", default-features = false, features = ["std", "derive"] }
 
-jsonwebtoken = { version = "7.2", default-features = false, optional = true }
+jsonwebtoken = { version = "8.0", default-features = false, optional = true }
 
 serde_json = { version = "1.0", default-features = false, features = ["std"], optional = true }
 
